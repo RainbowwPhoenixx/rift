@@ -490,8 +490,7 @@ namespace eval riftStyleConfig {
 	::rift::aliasStyles
 }
 
-# Parse args
-if {[llength $argv] != 1} {
+proc printUsage {argv0} {
 	puts "Usage: $argv0 GAME"
 	puts ""
 	puts "Available games:"
@@ -500,7 +499,18 @@ if {[llength $argv] != 1} {
 	}
 	exit 1
 }
+
+# Parse args
+if {[llength $argv] != 1} {
+	printUsage $argv0
+}
+
 set ::rift::gamePath "games/[lindex $argv 0]"
+if {![file exists "$::rift::gamePath/config.tcl"]} {
+	puts "Given game does not exist!"
+	printUsage $argv0
+}
+
 namespace eval riftGameConfig {
 	source "$::rift::gamePath/config.tcl"
 }
